@@ -2,11 +2,11 @@ package com.example.controller;
 
 import com.example.model.Employee;
 import com.example.service.EmployeeService;
+import graphql.ExecutionResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +21,17 @@ public class EmployeeController {
     public ResponseEntity<?> getEmployee(){
         List<Employee> employees = employeeService.getEmployee();
         return ResponseEntity.ok(employees);
+    }
+
+    @PostMapping("/getAll")
+    public ResponseEntity<Object> getAll(@RequestBody String query) {
+        ExecutionResult result = employeeService.getAll(query);
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/getPersonByEmail")
+    public ResponseEntity<Object> getPersonByEmail(@RequestBody String query) {
+        ExecutionResult result = employeeService.findByEmail(query);
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 }
